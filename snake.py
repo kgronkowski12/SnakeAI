@@ -1,25 +1,49 @@
 from config import *
+from brain import *
 import random
 
 class Snake:
 
 
     def __init__(self):
+        self.brain = Brain()
         self.boardSetup()
+    
+    def get_brain(self):
+        return self.brain
+
+    def look(self, x, y):
+        dist = 1
+        looking_for = ["#","@","^"]
+        start_x = self.x
+        start_y = self.y
+        while self.board[start_y+y][start_x+x] not in looking_for:
+            start_x+=x
+            start_y+=y
+            dist+=1
+        return self.brain.get_output(self.board[start_y+y][start_x+x],dist)
 
     def takeTurn(self):
         
-        
-        direction = 0 # move right
+        right_out = self.look(0,1)
+        left_out = self.look(0,-1)
+        down_out = self.look(-1,0)
+        up_out = self.look(1,0)
+        current_max = right_out
         addX=1
         addY=0
-        if direction==1:
+        # move right by default
+
+        if left_out>current_max:
+            current_max=left_out
             addX = -1 # move left
             addY = 0
-        elif direction==2:
+        if up_out>current_max:
+            current_max=up_out
             addX = 0
             addY = 1 # move up
-        elif direction==3:
+        if down_out>current_max:
+            current_max=down_out
             addX = 0
             addY = -1 # move down
 
