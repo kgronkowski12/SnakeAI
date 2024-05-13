@@ -6,7 +6,7 @@ class Snake:
 
 
     def __init__(self):
-        self.prevdir=1
+        self.prevdir=5
         self.brain = Brain()
         self.boardSetup()
     
@@ -48,55 +48,64 @@ class Snake:
                 break
 
     def takeTurn(self):
-        right_out = self.ultra_look(0,1)
-        left_out = self.ultra_look(0,-1)
-        down_out = self.ultra_look(-1,0)
-        up_out = self.ultra_look(1,0)
-        current_max = right_out
+        right_out = self.ultra_look(1,0)
+        left_out = self.ultra_look(-1,0)
+        down_out = self.ultra_look(0,-1)
+        up_out = self.ultra_look(0,1)
 
         if self.prevdir==0:
-            left_out=-9999999999
-            right_out*=1.1
+            right_out+=1
         if self.prevdir==1:
-            right_out=-999999999
-            left_out*=1.1
+            left_out+=1
         elif self.prevdir==2:
-            up_out=-999999999999
-            up_out*=1.1
+            up_out+=1
+        elif self.prevdir==3:
+            down_out+=1
+
+
+        if self.prevdir!=1:
+            addX=1
+            addY=0
+            current_max = right_out
+            # move right by default
         else:
-            down_out=-90000000000
-            down_out*=1.1
+            addX=-1
+            addY=0
+            current_max = left_out
 
 
-        self.prevdir=0
-        addX=1
-        addY=0
-        # move right by default
-
-        if left_out>current_max:
+        if left_out>current_max and self.prevdir!=0:
             self.prevdir=1
             current_max=left_out
             addX = -1 # move left
             addY = 0
-        if up_out>current_max:
+        if up_out>current_max and self.prevdir!=3:
             self.prevdir=2
             current_max=up_out
             addX = 0
             addY = 1 # move up
-        if down_out>current_max:
+        if down_out>current_max and self.prevdir!=2:
             self.prevdir=3
             current_max=down_out
             addX = 0
             addY = -1 # move down
+        if addX==1 and addY==0:
+            self.prevdir=0
 
+        if len(self.tail)>0:
+            last_tail = [self.tail[len(self.tail)-1][0], self.tail[len(self.tail)-1][1]]
+        else:
+            last_tail = [self.y,self.x]
         # moving tail
         for tail_number in range(len(self.tail)):
             if tail_number==0:
                 self.tail[0]=[self.y,self.x]
             else:
-                self.tail[tail_number]=[self.tail[tail_number-1][0]  , self.tail[tail_number-1][1]]
-                self.board[self.tail[tail_number-1][0]][self.tail[tail_number-1][1]]="@"
+                self.tail[len(self.tail)-tail_number]=[self.tail[len(self.tail)-tail_number-1][0]  , self.tail[len(self.tail)-tail_number - 1][1]]
 
+        if self.addTail:
+            self.tail.append(last_tail)
+            self.addTail=False
 
         self.x+=addX
         self.y+=addY
@@ -106,15 +115,11 @@ class Snake:
             self.alive=False
         if self.board[self.y][self.x]=="^":
             self.points+=1
-            if self.points==1:
-                self.tail.append([self.y,self.x])
-            else:
-                self.tail.append([self.tail[len(self.tail)-1][0],self.tail[len(self.tail)-1][0]])
+            self.addTail = True
             
             self.placeFood()
             self.food_pos.remove([self.y,self.x])
             self.hunger=0
-            print("Point! ",self.points)
 
         self.drawObjects()
         self.hunger+=1
@@ -129,6 +134,7 @@ class Snake:
         self.points=0
         self.hunger=0
         self.tail = []
+        self.addTail=False
         self.food_pos = []
         self.alive = True
         self.board = [[" " for x in range(BOARDSIZE_Y)] for x in range(BOARDSIZE_X)]

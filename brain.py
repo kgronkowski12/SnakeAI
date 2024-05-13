@@ -39,11 +39,11 @@ class Brain:
             self.hidden_layer[obj]=weights
 
     def get_output(self, obj, distance):
-        multiplayer=(max(BOARDSIZE_X,BOARDSIZE_Y)-distance)/max(BOARDSIZE_X,BOARDSIZE_Y)
+        multiplayer=(max(BOARDSIZE_X,BOARDSIZE_Y)*2-distance)/max(BOARDSIZE_X,BOARDSIZE_Y)/2
         out = 1.0
         for node in range(HIDDEN_LAYER_SIZE):
             out*=self.hidden_layer[obj][node]
-        out/=distance
+        out *= multiplayer
 
         return out
 

@@ -8,6 +8,7 @@ for i in range(FIRST_GENERATION_SIZE):
     snake.get_brain().randomize_weights()
     snakes.append(snake)
 
+gen = 1
 while True: # main loop
     dead = 0
     for snake_number in range(len(snakes)):
@@ -24,8 +25,9 @@ while True: # main loop
 
             # Sortowanie od najlepszych
             snakes = sorted(snakes, key=lambda snake : snake.points, reverse = True)
-            print("GEN 1 MAX POINTS: ",snakes[0].points)
-            print(len(snakes))
+            print("GEN",gen," MAX POINTS: ",snakes[0].points)
+            gen+=1
+            time.sleep(5)
 
             # Zostawiamy najlepsze węże
             snakes = snakes[0:BEST_SAMPLES]
