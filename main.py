@@ -1,49 +1,34 @@
-from snake import *
+import pygame
+from pygame.locals import *
+from generationManager import GenerationManager
 from config import *
-import time
+from boardRenderer import *
+from tile import *
+pygame.init()
+ 
+FramePerSec = pygame.time.Clock()
+ 
+displaysurface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Snake AI")
 
-snakes = []
-for i in range(FIRST_GENERATION_SIZE):   
-    snake = Snake()
-    snake.get_brain().randomize_weights()
-    snakes.append(snake)
+ALL_SPRITES = pygame.sprite.Group()
 
-gen = 1
-while True: # main loop
-    dead = 0
-    for snake_number in range(len(snakes)):
-        if(snake_number==0 and snakes[0].alive):
-            snakes[0].printBoard()
-            time.sleep(TURN_TIME)
-        if(snakes[snake_number].alive):
-            snakes[snake_number].takeTurn()
-        else:
-            dead+=1
-        if dead==len(snakes):
+gm = GenerationManager(ALL_SPRITES)
+gm.prepare()
 
-            # Przygotuj następną generacje!
+while True:
 
-            # Sortowanie od najlepszych
-            snakes = sorted(snakes, key=lambda snake : snake.points, reverse = True)
-            print("GEN",gen," MAX POINTS: ",snakes[0].points)
-            gen+=1
-            time.sleep(5)
+    gm.loop()
 
-            # Zostawiamy najlepsze węże
-            snakes = snakes[0:BEST_SAMPLES]
-            print("kept!")
-
-            # Najlepsze węże mają dzieci ze sobą, prowadzi do uśredniania wszystkich wartości
-            for mother in range(BEST_SAMPLES):
-                for father in range(BEST_SAMPLES):
-                    print(mother," <-> ",father)
-                    if mother != father:
-                        offspring = Snake()
-                        offspring.get_brain().mix_brains(snakes[mother].get_brain(),snakes[father].get_brain())
-                        snakes.append(offspring)
-
-            for snake in snakes:
-                snake.boardSetup()
-            
-
-
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+     
+    displaysurface.fill(BACKGROUND_COLOR)
+ 
+    for entity in ALL_SPRITES:
+        displaysurface.blit(entity.surf, entity.rect)
+ 
+    pygame.display.update()
+    FramePerSec.tick(FPS)

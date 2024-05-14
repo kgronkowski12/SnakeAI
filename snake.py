@@ -137,12 +137,12 @@ class Snake:
         self.addTail=False
         self.food_pos = []
         self.alive = True
-        self.board = [[" " for x in range(BOARDSIZE_Y)] for x in range(BOARDSIZE_X)]
+        self.board = [[" " for x in range(BOARDSIZE_X)] for y in range(BOARDSIZE_Y)]
 
         # setting walls
         for y in range(len(self.board)):
             for x in range(len(self.board[y])):
-                if y == 0 or y== len(self.board)-1 or x == 0 or x == len(self.board[x])-1:
+                if y == 0 or y== len(self.board)-1 or x == 0 or x == len(self.board[y])-1:
                     self.board[y][x]="#"
         
         # setting player
@@ -156,7 +156,7 @@ class Snake:
 
     def drawObjects(self):
         for y in range(len(self.board)):
-            for x in range(len(self.board)):
+            for x in range(len(self.board[0])):
                 self.board[y][x]=" "
                 if y == 0 or y== len(self.board)-1 or x == 0 or x == len(self.board[x])-1:
                     self.board[y][x]="#"
