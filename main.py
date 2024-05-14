@@ -16,6 +16,7 @@ ALL_SPRITES = pygame.sprite.Group()
 gm = GenerationManager(ALL_SPRITES)
 gm.prepare()
 
+out = 0
 while True:
 
     gm.loop()
@@ -29,6 +30,9 @@ while True:
  
     for entity in ALL_SPRITES:
         displaysurface.blit(entity.surf, entity.rect)
+
+    for holder in ALL_TEXT:
+        displaysurface.blit(holder.text, holder.position)
  
     pygame.display.update()
     FramePerSec.tick(FPS)

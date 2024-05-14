@@ -1,7 +1,7 @@
 import pygame
 
 SCREEN_HEIGHT = 800
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 1100
 FPS = 60
 
 BACKGROUND_COLOR = (255,255,255)
@@ -10,9 +10,11 @@ EMPTY_COLOR = (0,0,0)
 PLAYER_COLOR = (0,0,240)
 TAIL_COLOR = (0,0,255)
 FOOD_COLOR = (0,255,0)
+DEAD_COLOR = (200,0,0)
+
 
 ALL_SPRITES = pygame.sprite.Group()   
-
+ALL_TEXT = []
 
 
 BOARDSIZE_X = 30
@@ -28,7 +30,7 @@ MAX_HUNGER = 200
 FIRST_GENERATION_SIZE = 25
 
 
-BEST_SAMPLES = 5 # Uwaga! Prowadzi do x + x*x dodatkowych węży (każdy wąż tu wybrany będzie mieć dzieci z każdym innym)
+BEST_SAMPLES = 5 # Uwaga! Prowadzi do x*x węży w każdej generacji (każdy wąż tu wybrany będzie mieć dzieci z każdym innym)
 
 SMALL_MUTATION_CHANCE = 0.3
 BIG_MUTATION_CHANCE = 0.05
