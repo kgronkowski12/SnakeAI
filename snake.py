@@ -149,7 +149,7 @@ class Snake:
         self.x = BOARDSIZE_X//2
         self.y = BOARDSIZE_Y//2
 
-        for food in range(15):
+        for food in range(FOOD_COUNT):
             self.placeFood()
         self.drawObjects()
 
