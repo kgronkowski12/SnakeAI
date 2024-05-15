@@ -11,6 +11,7 @@ class GenerationManager:
         self.gen = 0
         self.watching = 0
         self.changing = 0
+        self.new_gen = 0
 
     def prepare(self):
         self.snakes = []
@@ -47,6 +48,7 @@ class GenerationManager:
                 # Sortowanie od najlepszych
                 self.snakes = sorted(self.snakes, key=lambda snake : snake.points, reverse = True)
                 print("GEN",self.gen," MAX POINTS: ",self.snakes[0].points)
+                self.new_gen = 1
                 self.watching=0
                 self.gen+=1
                 time.sleep(5)
@@ -56,12 +58,19 @@ class GenerationManager:
                 print("kept!")
 
                 # Najlepsze węże mają dzieci ze sobą, prowadzi do uśredniania wszystkich wartości
-                for mother in range(BEST_SAMPLES):
-                    for father in range(BEST_SAMPLES):
-                        if mother != father:
-                            offspring = Snake()
-                            offspring.get_brain().mix_brains(self.snakes[mother].get_brain(),self.snakes[father].get_brain())
-                            self.snakes.append(offspring)
+                newSnakes = []
+                for repeat in range(REPEATS):
+                    for mother in range(BEST_SAMPLES):
+                        for father in range(BEST_SAMPLES):
+                            if mother != father:
+                                offspring = Snake()
+                                offspring.get_brain().mix_brains(self.snakes[mother].get_brain(),self.snakes[father].get_brain())
+                                newSnakes.append(offspring)
+                for s in newSnakes:
+                    self.snakes.append(s)
+                for s in range(NEW_SNAKES):
+                    sn = Snake()
+                    self.snakes.append(sn)
 
                 for snake in self.snakes:
                     snake.boardSetup()
@@ -86,11 +95,15 @@ class GenerationManager:
         self.renderer.watching.changeText(watching_txt)
 
         gen_info = f"Gen#{self.gen}: HSc {b} M {m} Mdn {med} SD {sd}"
-        if self.gen<10:
+        if self.gen<=10:
             self.renderer.prev_gen[self.gen-1].changeText(gen_info)
         else:
-            for g in range(9):
-                self.renderer.prev_gen[g].changeText(self.renderer.prev_gen[g+1].text)
+            if self.new_gen==1:
+                for g in range(9):
+                    self.renderer.prev_gen[g].changeText(self.renderer.prev_gen[g+1].plain)
+                self.new_gen=0
             self.renderer.prev_gen[9].changeText(gen_info)
+            
+        return 0
 
 

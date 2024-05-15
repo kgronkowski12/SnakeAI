@@ -19,7 +19,9 @@ gm.prepare()
 out = 0
 while True:
 
-    gm.loop()
+    if out==0:
+        out = 1    
+        out = gm.loop()
 
     for event in pygame.event.get():
         if event.type == QUIT:

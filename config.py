@@ -7,7 +7,6 @@ FPS = 60
 BACKGROUND_COLOR = (255,255,255)
 WALL_COLOR = (160,160,160)
 EMPTY_COLOR = (0,0,0)
-PLAYER_COLOR = (0,0,240)
 TAIL_COLOR = (0,0,255)
 FOOD_COLOR = (0,255,0)
 DEAD_COLOR = (200,0,0)
@@ -21,17 +20,18 @@ BOARDSIZE_X = 30
 BOARDSIZE_Y = 45
 
 HIDDEN_LAYER_SIZE = 9
-TURN_TIME = 0.01
 
-FOOD_COUNT = 3
-MAX_HUNGER = 200
-
+FOOD_COUNT = 9
+MAX_HUNGER = 300
 
 
-FIRST_GENERATION_SIZE = 25
+
+FIRST_GENERATION_SIZE = 50
 
 
-BEST_SAMPLES = 5 # Uwaga! Prowadzi do x*x węży w każdej generacji (każdy wąż tu wybrany będzie mieć dzieci z każdym innym)
+BEST_SAMPLES = 6 # Uwaga! Prowadzi do x*x węży w każdej generacji (każdy wąż tu wybrany będzie mieć dzieci z każdym innym)
+REPEATS = 1
+NEW_SNAKES = 1
 
-SMALL_MUTATION_CHANCE = 0.3
-BIG_MUTATION_CHANCE = 0.05
+SMALL_MUTATION_CHANCE = 0.1
+BIG_MUTATION_CHANCE = 0.01

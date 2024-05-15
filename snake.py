@@ -1,6 +1,7 @@
 from config import *
 from brain import *
 import random
+import statistics
 
 class Snake:
 
@@ -8,6 +9,7 @@ class Snake:
     def __init__(self):
         self.prevdir=5
         self.brain = Brain()
+        self.brain.randomize_weights()
         self.boardSetup()
     
     def get_brain(self):
@@ -38,7 +40,6 @@ class Snake:
             outputs.append(self.look(start_x,start_y,0,1,dist))
         outputs.append(self.brain.get_output(self.board[start_y+y][start_x+x],dist))
         return max(outputs)
-
     def placeFood(self):
         # Terrible O(inf)!!!!
         while True:
@@ -52,16 +53,24 @@ class Snake:
         left_out = self.ultra_look(-1,0)
         down_out = self.ultra_look(0,-1)
         up_out = self.ultra_look(0,1)
-
+        print(self.same_dir_add)
         if self.prevdir==0:
-            right_out+=1
-        if self.prevdir==1:
-            left_out+=1
+            right_out+=self.same_dir_add+1
+        elif self.prevdir==1:
+            left_out+=self.same_dir_add+1
         elif self.prevdir==2:
-            up_out+=1
+            up_out+=self.same_dir_add+1
         elif self.prevdir==3:
-            down_out+=1
+            down_out+=self.same_dir_add+1
 
+        if self.widzimisie_dir==0:
+            right_out+=self.widzimisie
+        elif self.widzimisie_dir==1:
+            left_out+=self.widzimisie
+        elif self.widzimisie_dir==2:
+            up_out+=self.widzimisie
+        elif self.widzimisie_dir==3:
+            down_out+=self.widzimisie
 
         if self.prevdir!=1:
             addX=1
@@ -125,12 +134,22 @@ class Snake:
         self.hunger+=1
         if self.hunger>= MAX_HUNGER:
             self.alive=False
-        
+        self.step_count+=1
+        if self.step_count>self.widzimisie_timer:
+            self.step_count=0
+            self.widzimisie_dir = random.randint(0,4)
         
 
 
     # clears board and prepares for playing
     def boardSetup(self):
+        self.widzimisie_timer = sum(self.brain.hidden_layer["widzimisie_timer"])
+        self.widzimisie = abs(sum(self.brain.hidden_layer["widzimisie"]))
+        self.same_dir_add = abs(sum(self.brain.hidden_layer["stubborn"]))
+
+        self.widzimisie_dir = random.randint(0,4)
+        self.step_count=0
+        self.prevdir=5
         self.points=0
         self.hunger=0
         self.tail = []
