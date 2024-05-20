@@ -1,6 +1,7 @@
 import pygame
 from config import *
 
+# One square sprite from which the board is built
 class Tile(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__() 

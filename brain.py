@@ -1,15 +1,13 @@
 import random
 from config import *
 
+# Class responsible to make decisions  on which direction the snake should move in.
 class Brain:
 
     def __init__(self):
         self.hidden_layer= dict()
 
-    def copy_brain(self,other_brain):
-        for key, val in other_brain.hidden_layer:
-            self.hidden_layer[key]=val
-
+    # Merges to brains into one, used when creating offspring of two snakes
     def mix_brains(self, mother, father):
         for key, val in mother.hidden_layer.items():
             weights = []
@@ -29,8 +27,14 @@ class Brain:
                 weights.append(weight_val)
             self.hidden_layer[key]=weights
 
-
+    # Randomizes the hidden layer values.
     def randomize_weights(self):
+        # # - wall
+        # ^ - food
+        # @ - tail
+        # stubborn - unwilingness to change directions
+        # widzimisie - strength of wanting to move in a random direction for no reason
+        # widzimisie_timer - how often widzimisie changes
         objects = ["#", "^", "@", "stubborn", "widzimisie","widzimisie_timer"]
         for obj in objects:
             weights = []
@@ -38,15 +42,14 @@ class Brain:
                 weights.append(random.uniform(-5,5))
             self.hidden_layer[obj]=weights
 
-
+    # Assigns a value to a direction
     def get_output(self, obj, distance):
-        #multiplayer=(max(BOARDSIZE_X,BOARDSIZE_Y)*2-distance)/max(BOARDSIZE_X,BOARDSIZE_Y)/2
         out = 1.0
+        # Multiplies out by all values in hidden layer, matching seen obstacle
         for node in range(HIDDEN_LAYER_SIZE):
             out*=self.hidden_layer[obj][node]
-        #out *= multiplayer
+        # The farther away the obstacle, the less significant output value
         out/=distance
-
         return out
 
 

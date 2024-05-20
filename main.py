@@ -19,6 +19,7 @@ gm.prepare()
 out = 0
 while True:
 
+    # Wait till previous turn ended, make next turn
     if out==0:
         out = 1    
         out = gm.loop()
@@ -29,7 +30,8 @@ while True:
             sys.exit()
      
     displaysurface.fill(BACKGROUND_COLOR)
- 
+    
+    # Display sprites and text
     for entity in ALL_SPRITES:
         displaysurface.blit(entity.surf, entity.rect)
 

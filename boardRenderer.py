@@ -3,6 +3,7 @@ from tile import *
 from config import *
 from textHolder import *
 
+# Class resposible for rendering the board state to screen.
 class BoardRenderer():
     def __init__(self,ALL_SPRITES):
 
@@ -49,7 +50,6 @@ class BoardRenderer():
 
     # Changes the color of every tile in the board to match given board in text form
     def render(self, text_board, alive):
-        print("rendering...")
         for y in range(len(self.board)):
             for x in range(len(self.board[0])):
                 if text_board[y][x]=="#":
@@ -62,7 +62,6 @@ class BoardRenderer():
                     if alive:
                         self.board[y][x].change_color(TAIL_COLOR)
                     else:
-                        print("MAMS")
                         self.board[y][x].change_color(DEAD_COLOR)
 
 
